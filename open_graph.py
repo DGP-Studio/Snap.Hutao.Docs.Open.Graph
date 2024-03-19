@@ -45,7 +45,7 @@ def make_open_graph_image_with_description(title: str, description: str, hash_ke
         HEADER = "Snap Hutao 官方网站"
 
     if lang == "en":
-        footer = "Snap Hutao: Multifunctional Open-Source Genshin Impact Toolkit"
+        footer = "Snap Hutao: Multifunctional Open-source Genshin Impact Toolkit"
     else:
         footer = "胡桃工具箱： 实用的开源多功能原神工具箱"
 
@@ -76,7 +76,7 @@ def make_open_graph_image_with_description(title: str, description: str, hash_ke
 
     # add auto-next-line text box
     title_lines = wrap_text(title, title_font, 800, lang)
-    description_lines = wrap_text(description, description_font, 600, lang)
+    description_lines = wrap_text(description, description_font, 580, lang)
     footer_lines = wrap_text(footer, footer_font, 500, lang)
 
     # draw Header
@@ -130,7 +130,7 @@ def make_open_graph_image_with_no_description(title: str, hash_key: str, lang: s
         HEADER = "Snap Hutao 官方网站"
 
     if lang == "en":
-        footer = "Snap Hutao: Multifunctional Open-Source Genshin Impact Toolkit"
+        footer = "Snap Hutao: Multifunctional Open-source Genshin Impact Toolkit"
     else:
         footer = "胡桃工具箱： 实用的开源多功能原神工具箱"
 
