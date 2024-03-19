@@ -143,22 +143,25 @@ def make_open_graph_image_with_no_description(title: str, hash_key: str, lang: s
     # create font object
     if lang == "en":
         title_font = ImageFont.truetype('src/genshin.ttf', 55)
-        footer_font = ImageFont.truetype('src/genshin.ttf', 40)
+        footer_font = ImageFont.truetype('src/genshin.ttf', 35)
     else:
-        title_font = ImageFont.truetype('src/genshin.ttf', 110)
-        footer_font = ImageFont.truetype('src/genshin.ttf', 50)
+        if len(title) > 5:
+            title_font = ImageFont.truetype('src/genshin.ttf', 80)
+        else:
+            title_font = ImageFont.truetype('src/genshin.ttf', 110)
+        footer_font = ImageFont.truetype('src/genshin.ttf', 45)
 
     # create draw object and text box
     draw = ImageDraw.Draw(canvas)
 
     header_position = (60, 110)
     title_position = (50, 180)
-    footer_position = (50, 380)
+    footer_position = (50, 420)
     logo_position = (820, 150)
     footer_img_position = (610, 520)
 
     # add auto-next-line text box
-    title_lines = wrap_text(title, title_font, 800, lang)
+    title_lines = wrap_text(title, title_font, 550, lang)
     footer_lines = wrap_text(footer, footer_font, 500, lang)
 
     # draw Header
@@ -166,7 +169,7 @@ def make_open_graph_image_with_no_description(title: str, hash_key: str, lang: s
 
     # draw title
     for i, line in enumerate(title_lines):
-        line_position = (title_position[0], title_position[1] + i * title_font.font.getsize(title)[0][1])
+        line_position = (title_position[0], title_position[1] + i * title_font.font.getsize(title)[0][1] * 1.2)
         draw.text(line_position, line, font=title_font, fill='black')
 
     # draw footer
@@ -209,3 +212,8 @@ def hutao_docs_parser(url: str, hash_key: str, lang: str = "en"):
     else:
         make_open_graph_image_with_no_description(this_title, hash_key, lang)
     return True
+
+
+if __name__ == "__main__":
+    hutao_docs_parser("https://hut.ao/zh/features/mhy-account-switch.html", hash_key="test", lang="zh")
+    hutao_docs_parser("https://hut.ao/en/features/mhy-account-switch.html", hash_key="test2", lang="en")
