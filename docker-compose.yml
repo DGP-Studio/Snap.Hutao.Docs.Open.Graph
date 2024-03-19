@@ -12,12 +12,13 @@ services:
       - "3965:8080"
     volumes:
       - ./output:/app/output
+      - ./src:/app/src
     restart: unless-stopped
     depends_on:
       - tunnel
 
   tunnel:
-    container_name: Snap-Hutao-Generic-API-Tunnel
+    container_name: Snap-Hutao-Open-Graph-Tunnel
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run
