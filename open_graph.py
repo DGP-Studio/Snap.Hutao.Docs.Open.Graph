@@ -214,6 +214,39 @@ def hutao_docs_parser(url: str, hash_key: str, lang: str = "en"):
     return True
 
 
+def fuck_gitcode_png(github_org_name: str, github_repo_name: str) -> bool:
+    en_font = ImageFont.truetype('src/genshin.ttf', 35)
+    zh_font = ImageFont.truetype('src/genshin.ttf', 40)
+
+    # create canvas
+    canvas = Image.new('RGBA', (1280, 600), "white")
+
+    # GitCode forbidden image
+    forbidden_img = Image.open("./src/gitcode/gitcode-forbidden-white.png").convert("RGBA")
+    forbidden_img = forbidden_img.resize((360, 180))
+    canvas.paste(forbidden_img, (430, 35))
+
+    # Add text
+    draw = ImageDraw.Draw(canvas)
+    text = "感谢 GitCode 未经许可镜像本项目， 点击这里访问原始仓库"
+    main_text = wrap_text(text, zh_font, 1200, "zh")
+    for i, line in enumerate(main_text):
+        line_position = (100, 300 + i * zh_font.font.getsize(text)[0][1] * 1.2)
+        draw.text(line_position, line, font=zh_font, fill='black')
+
+    # Add source
+    github_logo_path = "./src/gitcode/github-mark.png"
+    github_logo = Image.open(github_logo_path).convert("RGBA").resize((100, 100))
+    canvas.paste(github_logo, (100, 400), github_logo)
+
+    draw.text((220, 430), f"{github_org_name}/{github_repo_name}", fill="black", font=en_font)
+
+    os.makedirs(f"output/gitcode/{github_org_name}", exist_ok=True)
+    canvas.save(f"output/gitcode/{github_org_name}/{github_repo_name}.png")
+
+    return True
+
+
 if __name__ == "__main__":
     hutao_docs_parser("https://hut.ao/zh/features/mhy-account-switch.html", hash_key="test", lang="zh")
     hutao_docs_parser("https://hut.ao/en/features/mhy-account-switch.html", hash_key="test2", lang="en")

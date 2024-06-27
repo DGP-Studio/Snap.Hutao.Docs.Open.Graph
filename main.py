@@ -4,7 +4,7 @@ import hashlib
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from urllib.parse import urlparse
-from open_graph import hutao_docs_parser
+from open_graph import hutao_docs_parser, fuck_gitcode_png
 from server_config import API_VERSION, SERVER_DESCRIPTION, CONTACT_INFO, LICENSE_INFO
 
 app = FastAPI(redoc_url=None,
@@ -50,6 +50,20 @@ async def generate_open_graph_image(url: str, has_description: bool = False):
             return FileResponse(f"output/{hashed_uri}.png")
         else:
             raise HTTPException(status_code=500, detail="Failed to generate Open Graph image")
+
+
+@app.get("/gitcode")
+async def generate_gitcode_image(repo: str):
+    org_name, repo_name = repo.split("/")
+    if os.path.exists(f"output/gitcode/{org_name}/{repo_name}.png"):
+        print("cached")
+        return FileResponse(f"output/gitcode/{org_name}/{repo_name}.png")
+    else:
+        if fuck_gitcode_png(org_name, repo_name):
+            print("created")
+            return FileResponse(f"output/gitcode/{org_name}/{repo_name}.png")
+        else:
+            return FileResponse(f"src/gitcode/pixel.png")
 
 
 if __name__ == "__main__":
