@@ -224,7 +224,7 @@ def fuck_gitcode_png(github_org_name: str, github_repo_name: str) -> bool:
     # GitCode forbidden image
     forbidden_img = Image.open("./src/gitcode/gitcode-forbidden-white.png").convert("RGBA")
     forbidden_img = forbidden_img.resize((360, 180))
-    canvas.paste(forbidden_img, (430, 35))
+    canvas.paste(forbidden_img, (460, 35))
 
     # Add text
     draw = ImageDraw.Draw(canvas)
