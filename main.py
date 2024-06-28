@@ -1,7 +1,7 @@
 import uvicorn
 import os
 import hashlib
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from urllib.parse import urlparse
 from open_graph import hutao_docs_parser, fuck_gitcode_png
@@ -53,17 +53,21 @@ async def generate_open_graph_image(url: str, has_description: bool = False):
 
 
 @app.get("/gitcode")
-async def generate_gitcode_image(repo: str):
-    org_name, repo_name = repo.split("/")
-    if os.path.exists(f"output/gitcode/{org_name}/{repo_name}.png"):
-        print("cached")
-        return FileResponse(f"output/gitcode/{org_name}/{repo_name}.png")
-    else:
-        if fuck_gitcode_png(org_name, repo_name):
-            print("created")
+async def generate_gitcode_image(request: Request):
+    org_name, repo_name = request.query_params.get('repo').split("/")
+    referer = request.headers.get('referer')
+    if referer and "gitcode.com" in referer:
+        if os.path.exists(f"output/gitcode/{org_name}/{repo_name}.png"):
+            print("cached")
             return FileResponse(f"output/gitcode/{org_name}/{repo_name}.png")
         else:
-            return FileResponse(f"src/gitcode/pixel.png")
+            if fuck_gitcode_png(org_name, repo_name):
+                print("created")
+                return FileResponse(f"output/gitcode/{org_name}/{repo_name}.png")
+            else:
+                return FileResponse(f"src/gitcode/pixel.png")
+    else:
+        return FileResponse(f"src/gitcode/pixel.png")
 
 
 if __name__ == "__main__":
