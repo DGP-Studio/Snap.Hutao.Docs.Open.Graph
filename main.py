@@ -54,7 +54,10 @@ async def generate_open_graph_image(url: str, has_description: bool = False):
 
 @app.get("/gitcode")
 async def generate_gitcode_image(request: Request):
-    org_name, repo_name = request.query_params.get('repo').split("/")
+    repo_list = request.query_params.get('repo').split("/")
+    org_name = repo_list[0]
+    repo_name = repo_list[1]
+    
     referer = request.headers.get('referer')
     if referer and "gitcode.com" in referer:
         if os.path.exists(f"output/gitcode/{org_name}/{repo_name}.png"):
@@ -67,6 +70,7 @@ async def generate_gitcode_image(request: Request):
             else:
                 return FileResponse(f"src/gitcode/pixel.png")
     else:
+        print("no gitcode")
         return FileResponse(f"src/gitcode/pixel.png")
 
 
